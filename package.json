@@ -7,15 +7,23 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "db:seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@prisma/client": "^6.5.0",
     "@tailwindcss/vite": "^4.0.14",
+    "@types/bcrypt": "^5.0.2",
+    "bcrypt": "^5.1.1",
     "nuxt": "^3.16.1",
     "socket.io": "^4.8.1",
     "tailwindcss": "^4.0.14",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
-  "packageManager": "pnpm@10.6.5+sha512.cdf928fca20832cd59ec53826492b7dc25dc524d4370b6b4adbf65803d32efaa6c1c88147c0ae4e8d579a6c9eec715757b50d4fa35eea179d868eada4ed043af"
+  "packageManager": "pnpm@10.6.5+sha512.cdf928fca20832cd59ec53826492b7dc25dc524d4370b6b4adbf65803d32efaa6c1c88147c0ae4e8d579a6c9eec715757b50d4fa35eea179d868eada4ed043af",
+  "devDependencies": {
+    "prisma": "^6.5.0",
+    "tsx": "^4.19.3"
+  }
 }

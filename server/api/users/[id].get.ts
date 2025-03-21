@@ -1,17 +1,49 @@
-import { H3Event } from 'h3'
-import { users } from './types'
+import { PrismaClient } from '@prisma/client'
 
-// 获取单个用户
-export default defineEventHandler(async (event: H3Event) => {
-  const userId = getRouterParam(event, 'id')
-  const user = users.find(u => u.id === parseInt(userId))
-  
-  if (!user) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: '用户不存在'
-    })
+const prisma = new PrismaClient()
+
+interface User {
+  id: number
+  email: string
+  name: string | null
+  createdAt: Date
+  updatedAt: Date
+}
+
+export default defineEventHandler(async (event) => {
+  try {
+    const id = getRouterParam(event, 'id')
+
+    // 验证用户ID
+    if (!id) {
+      return {
+        status: 'error',
+        message: '用户ID为必填项'
+      }
+    }
+
+    // 查询用户信息
+    const users = await prisma.$queryRaw<User[]>`
+      SELECT id, email, name, createdAt, updatedAt 
+      FROM User 
+      WHERE id = ${id}
+    `
+
+    if (!users || users.length === 0) {
+      return {
+        status: 'error',
+        message: '用户不存在'
+      }
+    }
+
+    return {
+      status: 'success',
+      data: users[0]
+    }
+  } catch (error: any) {
+    return {
+      status: 'error',
+      message: '获取用户信息失败：' + (error.message || '未知错误')
+    }
   }
-  
-  return user
 })

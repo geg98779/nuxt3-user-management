@@ -78,13 +78,7 @@
 
     <!-- 用户列表 -->
     <div class="bg-white rounded-lg shadow">
-      <div class="p-4" v-if="loading">
-        加载中...
-      </div>
-      <div class="p-4" v-else-if="users.length === 0">
-        暂无用户数据
-      </div>
-      <table v-else class="min-w-full divide-y divide-gray-200">
+      <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
@@ -211,7 +205,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 
 interface User {
   id: number
@@ -246,7 +240,6 @@ const timeDifference = computed(() => {
 })
 
 const users = ref<User[]>([])
-const loading = ref(false)
 const showEditDialog = ref(false)
 const newUser = ref({
   email: '',
@@ -265,15 +258,12 @@ const editingUser = ref<User & { password?: string }>({
 // 获取用户列表
 const fetchUsers = async () => {
   try {
-    loading.value = true
     console.log('Fetching users...')
     const queryParams = new URLSearchParams({
       page: currentPage.value.toString(),
       pageSize: pageSize.value.toString(),
-      ...(startDate.value && endDate.value ? {
-        startDate: startDate.value,
-        endDate: endDate.value
-      } : {})
+      startDate: startDate.value,
+      endDate: endDate.value
     })
     const response = await fetch(`/api/users?${queryParams}`)
     console.log('Response:', response)
@@ -288,8 +278,6 @@ const fetchUsers = async () => {
   } catch (error) {
     console.error('Error fetching users:', error)
     alert('获取用户列表失败')
-  } finally {
-    loading.value = false
   }
 }
 
@@ -309,6 +297,9 @@ const handleDateChange = () => {
   currentPage.value = 1
   fetchUsers()
 }
+
+// 监听页码变化
+watch(currentPage, handlePageChange)
 
 // 添加用户
 const handleSubmit = async () => {
@@ -361,12 +352,11 @@ const handleUpdate = async () => {
     if (result.status === 'success') {
       alert('更新成功')
       showEditDialog.value = false
-      await fetchUsers()
+      fetchUsers()
     } else {
       alert(result.message)
     }
   } catch (error) {
-    console.error('Error updating user:', error)
     alert('更新用户失败')
   }
 }
@@ -382,12 +372,11 @@ const deleteUser = async (id: number) => {
     const result = await response.json()
     if (result.status === 'success') {
       alert('删除成功')
-      await fetchUsers()
+      fetchUsers()
     } else {
       alert(result.message)
     }
   } catch (error) {
-    console.error('Error deleting user:', error)
     alert('删除用户失败')
   }
 }
@@ -396,9 +385,6 @@ const deleteUser = async (id: number) => {
 const formatDate = (date: Date) => {
   return new Date(date).toLocaleString()
 }
-
-// 监听页码变化
-watch(currentPage, handlePageChange)
 
 // 页面加载时获取用户列表
 onMounted(() => {

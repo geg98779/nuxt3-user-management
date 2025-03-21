@@ -1,75 +1,69 @@
-# Nuxt Minimal Starter
+# Nuxt 3 前后端联通 Demo
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+这是一个使用 Nuxt 3 框架开发的前后端联通的示例项目，包含用户管理功能。
 
-## Setup
+## 功能特点
 
-Make sure to install dependencies:
+- 用户列表展示
+- 用户添加
+- 用户编辑
+- 用户删除
+- 分页功能
+- 时间范围筛选
 
+## 技术栈
+
+- Nuxt 3
+- TypeScript
+- Prisma ORM
+- MySQL
+- Tailwind CSS
+
+## 项目设置
+
+1. 克隆项目
 ```bash
-# npm
+git clone [你的仓库地址]
+cd [项目目录]
+```
+
+2. 安装依赖
+```bash
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
+3. 配置环境变量
 ```bash
-# npm
+cp .env.example .env
+```
+然后编辑 `.env` 文件，填入你的数据库连接信息。
+
+4. 初始化数据库
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+5. 启动开发服务器
+```bash
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+## 数据库设计
 
-Build the application for production:
+### User 表
+- id: 用户ID
+- email: 用户邮箱
+- name: 用户名称
+- password: 用户密码
+- createdAt: 创建时间
+- updatedAt: 更新时间
 
-```bash
-# npm
-npm run build
+## API 接口
 
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+### 用户管理
+- GET /api/users - 获取用户列表
+- POST /api/users - 创建新用户
+- GET /api/users/:id - 获取单个用户信息
+- PUT /api/users/:id - 更新用户信息
+- DELETE /api/users/:id - 删除用户
