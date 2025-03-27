@@ -21,3 +21,24 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Device {
+  id         Int       @id @default(autoincrement())
+  deviceName String    @map("device_name") @db.VarChar(255)
+  remarks    String?   @db.VarChar(255)
+  ctime      DateTime? @map("ctime")
+  number     String?   @db.VarChar(255)
+
+  @@map("t_device")
+}
+
+model ErrorMsg {
+  id     Int       @id @default(autoincrement())
+  dNo    String?   @map("d_no") @db.VarChar(16)
+  cTime  DateTime? @map("c_time")
+  eMsg   String?   @map("e_msg") @db.VarChar(255)
+  eNo    String?   @map("e_no") @db.VarChar(255)
+  type   String?   @db.VarChar(4)
+
+  @@map("t_error_msg")
+}

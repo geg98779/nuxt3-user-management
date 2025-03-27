@@ -1,17 +1,14 @@
 <template>
   <div>
-    <NuxtPage ></NuxtPage>
+    <Navigation />
+    <NuxtPage />
   </div>
 </template>
 
 <script setup lang="ts">
-const app  = 20;
-onMounted(async() => {
-  console.log('20')
-  await useFetch('/api/hello')
-})
+// 这里可以添加全局的逻辑
 </script>
 
 <style>
-@import "tailwindcss";
+/* 全局样式可以在这里添加 */
 </style>
